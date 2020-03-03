@@ -3,7 +3,7 @@ import notify2
 from news import topStories
 
 # path to notification window icon 
-ICON_PATH = "/root/Desktop/DesktopNotifier/news_icon.png"
+ICON_PATH = "# enter the path of the image file."
 
 # fetch news items 
 newsitems = topStories()
