@@ -1,53 +1,56 @@
-import requests 
-import xml.etree.ElementTree as ET 
+import requests
+import xml.etree.ElementTree as ET
 
 # url of news rss feed 
-RSS_FEED_URL = "http://www.hindustantimes.com/rss/topnews/rssfeed.xml"	
+RSS_FEED_URL = "http://www.hindustantimes.com/rss/topnews/rssfeed.xml"
 
-def loadRSS(): 
-	''' 
-	utility function to load RSS feed 
-	'''
-	# create HTTP request response object 
-	resp = requests.get(RSS_FEED_URL) 
 
-	# return response content 
-	return resp.content 
+def loadRSS():
+    '''
+    utility function to load RSS feed
+    '''
+    # create HTTP request response object
+    resp = requests.get(RSS_FEED_URL)
 
-def parseXML(rss): 
-	''' 
-	utility function to parse XML format rss feed 
-	'''
-	# create element tree root object 
-	root = ET.fromstring(rss) 
+    # return response content
+    return resp.content
 
-	# create empty list for news items 
-	newsitems = [] 
 
-	# iterate news items 
-	for item in root.findall('./channel/item'): 
-		news = {} 
+def parseXML(rss):
+    '''
+    utility function to parse XML format rss feed
+    '''
+    # create element tree root object
+    root = ET.fromstring(rss)
 
-		# iterate child elements of item 
-		for child in item: 
+    # create empty list for news items
+    newsitems = []
 
-			# special checking for namespace object content:media 
-			if child.tag == '{http://search.yahoo.com/mrss/}content': 
-				news['media'] = child.attrib['url'] 
-			else: 
-				news[child.tag] = child.text.encode('utf8') 
-		newsitems.append(news) 
+    # iterate news items
+    for item in root.findall('./channel/item'):
+        news = {}
 
-	# return news items list 
-	return newsitems 
+        # iterate child elements of item
+        for child in item:
 
-def topStories(): 
-	''' 
-	main function to generate and return news items 
-	'''
-	# load rss feed 
-	rss = loadRSS() 
+            # special checking for namespace object content:media
+            if child.tag == '{http://search.yahoo.com/mrss/}content':
+                news['media'] = child.attrib['url']
+            else:
+                news[child.tag] = child.text.encode('utf8')
+        newsitems.append(news)
 
-	# parse XML 
-	newsitems = parseXML(rss) 
-	return newsitems 
+    # return news items list
+    return newsitems
+
+
+def topStories():
+    '''
+    main function to generate and return news items
+    '''
+    # load rss feed
+    rss = loadRSS()
+
+    # parse XML
+    newsitems = parseXML(rss)
+    return newsitems
